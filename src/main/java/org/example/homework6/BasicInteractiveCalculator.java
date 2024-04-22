@@ -12,38 +12,27 @@ public class BasicInteractiveCalculator {
             double num1 = scanner.nextDouble();
             scanner.nextLine(); // Consume newline
 
-            System.out.print("Enter an operation (+, -, *, /): ");
-            String operation = scanner.nextLine();
+            String operation = ""; // Initialize operation variable
+            boolean validOperation = false;
+            while (!validOperation) {
+                System.out.print("Enter an operation (+, -, *, /): ");
+                operation = scanner.nextLine();
+                if (isValidOperation(operation)) {
+                    validOperation = true;
+                } else {
+                    System.out.println("Invalid operation. Please enter '+', '-', '*', or '/'.");
+                }
+            }
 
             System.out.print("Enter another number: ");
             double num2 = scanner.nextDouble();
             scanner.nextLine(); // Consume newline
 
-            double result;
-
-            switch (operation) {
-                case "+":
-                    result = num1 + num2;
-                    break;
-                case "-":
-                    result = num1 - num2;
-                    break;
-                case "*":
-                    result = num1 * num2;
-                    break;
-                case "/":
-                    if (num2 != 0) {
-                        result = num1 / num2;
-                    } else {
-                        System.out.println("Error: Division by zero");
-                        continue;
-                    }
-                    break;
-                default:
-                    System.out.println("Invalid operation");
-                    continue;
+            double result = performOperation(num1, operation, num2);
+            if (Double.isNaN(result)) {
+                System.out.println("Invalid operation");
+                continue;
             }
-
             System.out.println("Result: " + result);
 
             String choice;
@@ -60,5 +49,29 @@ public class BasicInteractiveCalculator {
             }
         }
         System.out.println("Exiting the calculator.");
+    }
+
+    private static double performOperation(double num1, String operation, double num2) {
+        switch (operation) {
+            case "+":
+                return num1 + num2;
+            case "-":
+                return num1 - num2;
+            case "*":
+                return num1 * num2;
+            case "/":
+                if (num2 != 0) {
+                    return num1 / num2;
+                } else {
+                    System.out.println("Error: Division by zero");
+                    return Double.NaN;
+                }
+            default:
+                return Double.NaN;
+        }
+    }
+
+    private static boolean isValidOperation(String operation) {
+        return operation.equals("+") || operation.equals("-") || operation.equals("*") || operation.equals("/");
     }
 }
